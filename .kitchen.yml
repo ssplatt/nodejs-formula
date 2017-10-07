@@ -1,0 +1,43 @@
+# vim: ft=yaml
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: salt_solo
+  is_file_root: true
+  salt_copy_filter:
+    - .kitchen
+    - .git
+  state_top:
+    base:
+      "*":
+        - test.mockup
+        - nodejs
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - nodejs
+
+platforms:
+  - name: bento/debian-9
+  - name: bento/debian-8
+
+suites:
+  - name: default
+    provisioner:
+      pillars:
+        nodejs.sls:
+          nodejs:
+            enabled: true
+
+  - name: custom
+    provisioner:
+      pillars-from-files:
+        nodejs.sls: pillar-custom.sls
+
+  - name: fromnpm
+    provisioner:
+      pillars-from-files:
+        nodejs.sls: pillar-fromnpm.sls

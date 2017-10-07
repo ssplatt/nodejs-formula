@@ -1,0 +1,15 @@
+# vim: ft=yaml
+# Defaults for nodejs
+
+nodejs:
+  enabled: false
+  from:
+    pkg: true
+  pkgs:
+    - nodejs
+  modules:
+    from:
+      pkg: true
+      npm: false
+    pkgs: []
+  config: {}

@@ -1,0 +1,49 @@
+# vim: ft=yaml
+---
+driver:
+  name: linode
+
+busser:
+  sudo: false
+
+provisioner:
+  name: salt_solo
+  is_file_root: true
+  salt_copy_filter:
+    - .kitchen
+    - .git
+  sudo: false
+  state_top:
+    base:
+      "*":
+        - test.mockup
+        - nodejs
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - nodejs
+
+platforms:
+  - name: debian_jessie
+  - name: debian_stretch
+    driver:
+      image: Debian 9
+
+suites:
+  - name: default
+    provisioner:
+      pillars:
+        nodejs.sls:
+          nodejs:
+            enabled: true
+
+  - name: custom
+    provisioner:
+      pillars-from-files:
+        nodejs.sls: pillar-custom.sls
+
+  - name: fromnpm
+    provisioner:
+      pillars-from-files:
+        nodejs.sls: pillar-fromnpm.sls
